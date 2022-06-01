@@ -40,6 +40,14 @@ class AuthController extends Controller
             return $this->jsonResponse(400, 'Data gagal divalidasi', $validator->errors());
         }
 
+        $user = User::where('email', $request->email)->first();
+        if ($user) {
+            if (!Hash::check($request->password, $user->password)) {
+                return $this->jsonResponse(401, 'Maaf, password anda salah.
+                Silakan coba lagi');
+            }
+        }
+
         $data = [
             'email'     => $request->input('email'),
             'password'  => $request->input('password'),
@@ -61,7 +69,7 @@ class AuthController extends Controller
         $rules = [
             'name'                  => 'required|min:3|max:35',
             'email'                 => 'required|email|unique:users,email',
-            'password'              => 'required|confirmed',
+            'password'              => 'required|confirmed|min:8',
             'agreement'             => 'required'
         ];
 
@@ -74,6 +82,7 @@ class AuthController extends Controller
             'email.unique'          => 'Email sudah terdaftar',
             'password.required'     => 'Password wajib diisi',
             'password.confirmed'    => 'Password tidak sama dengan konfirmasi password',
+            'password.min'          => 'Password harus lebih dari 8 karakter',
             'agreement.required'    => 'Anda harus menyetujui Terms of Service',
         ];
 
@@ -124,5 +133,10 @@ class AuthController extends Controller
         } else {
             return $this->jsonResponse(400, 'Gagal verifikasi email');
         }
+    }
+
+    public function me()
+    {
+        return $this->jsonResponse(200, 'Data user sukses didapat', Auth::user());
     }
 }

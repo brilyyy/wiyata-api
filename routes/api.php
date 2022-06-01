@@ -21,6 +21,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::name('auth.')
         ->prefix('auth')
         ->group(function () {
+            Route::get('me', [AuthController::class, 'me'])->name('me');
             Route::post('send-verification', [AuthController::class, 'sendVerification'])->name('send-verification');
             Route::post('verify-email/{token}', [AuthController::class, 'verifyEmail'])->name('verify-email');
         });
