@@ -27,7 +27,7 @@ Route::middleware(['auth:api'])->group(function () {
             Route::post('logout', [AuthController::class, 'logout'])->name('logout');
             Route::get('me', [AuthController::class, 'me'])->name('me');
             Route::post('send-verification', [AuthController::class, 'sendVerification'])->name('send-verification');
-            Route::post('verify-email/{token}', [AuthController::class, 'verifyEmail'])->name('verify-email');
+            Route::get('verify-email/{token}', [AuthController::class, 'verifyEmail'])->name('verify-email');
         });
     Route::name('category.')
         ->prefix('category')
