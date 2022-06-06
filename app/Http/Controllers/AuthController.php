@@ -139,4 +139,13 @@ class AuthController extends Controller
     {
         return $this->jsonResponse(200, 'Data user sukses didapat', Auth::user());
     }
+
+    public function logout()
+    {
+        if (Auth::check()) {
+            if (Auth::user()->token()->revoke()) {
+                return $this->jsonResponse(200, 'Sukses keluar');
+            }
+        }
+    }
 }
