@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -17,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::post('register', [AuthController::class, 'register'])->name('login');
+Route::get('category', [CategoryController::class, 'index'])->name('category');
+Route::get('category/{id}', [CategoryController::class, 'show'])->name('category.show');
 Route::middleware(['auth:api'])->group(function () {
     Route::name('auth.')
         ->prefix('auth')
@@ -25,5 +28,12 @@ Route::middleware(['auth:api'])->group(function () {
             Route::get('me', [AuthController::class, 'me'])->name('me');
             Route::post('send-verification', [AuthController::class, 'sendVerification'])->name('send-verification');
             Route::post('verify-email/{token}', [AuthController::class, 'verifyEmail'])->name('verify-email');
+        });
+    Route::name('category.')
+        ->prefix('category')
+        ->group(function () {
+            Route::post('add', [CategoryController::class, 'store'])->name('store');
+            Route::post('update/{id}', [CategoryController::class, 'update'])->name('update');
+            Route::delete('delete/{id}', [CategoryController::class, 'destroy'])->name('delete');
         });
 });
